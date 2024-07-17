@@ -1,0 +1,11 @@
+name: Issue
+description: File an issue.
+projects: ["Python-Code-Jam-2024-Royal-Redshifts/1"]
+body:
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+      placeholder: "Blah blah I need this and I need that blah blah blah"
+    validations:
+      required: true
