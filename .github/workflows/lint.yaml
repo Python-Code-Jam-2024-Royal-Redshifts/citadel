@@ -22,5 +22,14 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Set up poetry
+        uses: abatilo/actions-poetry@v2
+
+      - name: Install project dependencies
+        run: poetry install
+
       - name: Run pre-commit hooks
-        uses: pre-commit/action@v3.0.1
+        run: poetry run pre-commit run
+
+      - name: Run mypy
+        run: poetry run mypy citadel
