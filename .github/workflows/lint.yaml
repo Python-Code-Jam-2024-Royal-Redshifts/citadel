@@ -28,8 +28,11 @@ jobs:
       - name: Install project dependencies
         run: poetry install
 
-      - name: Run pre-commit hooks
-        run: poetry run pre-commit run
+      - name: Run Ruff lints
+        run: poetry run ruff check ./
+
+      - name: Run Ruff formatting
+        run: poetry run ruff format --check ./
 
       - name: Run mypy
         run: poetry run mypy citadel
