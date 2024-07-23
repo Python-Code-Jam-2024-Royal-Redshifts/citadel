@@ -34,8 +34,11 @@ def main() -> int:
 
     if not token:
         LOGGER.error(
-            "No Discord client secret was detected. Set the [green]`CITADEL_DISCORD_TOKEN`[/green] environment"
-            "variable to the secret's value.",
+            "No Discord client secret was detected. Set the [green]`CITADEL_DISCORD_TOKEN`[/] environment variable to "
+            "the secret's value.",
+        )
+        LOGGER.error(
+            "If needed, the variable can also be set in a file named [green]`.env`[/] in the current directory.",
         )
         return os.EX_NOINPUT
 
