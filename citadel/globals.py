@@ -8,7 +8,7 @@ _all_ = ["LOGGER"]
 
 # Logger
 logging.basicConfig(
-    level="NOTSET",
+    level=logging.INFO,
     format="%(message)s",
     datefmt="[%X]",
     handlers=[RichHandler(markup=True)],
