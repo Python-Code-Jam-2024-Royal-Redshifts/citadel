@@ -28,7 +28,9 @@ class CitadelClient(discord.Client):
     """The Citadel Discord Client."""
 
     def __init__(self) -> None:
-        super().__init__(intents=discord.Intents.default())
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self) -> None:
@@ -54,6 +56,7 @@ def main(
     # Set up the client, add commands, and start.
     client = CitadelClient()
     client.tree.add_command(commands.hello)
+    client.tree.add_command(commands.notes)
 
     client.run(discord_token)
 
