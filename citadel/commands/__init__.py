@@ -1,3 +1,4 @@
-__all__ = ["hello"]
+__all__ = ["hello", "notes"]
 
 from .hello import hello
+from .notes import notes
