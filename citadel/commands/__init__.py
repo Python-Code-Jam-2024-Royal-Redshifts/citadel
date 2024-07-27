@@ -1,4 +1,4 @@
-__all__ = ["hello", "notes"]
+__all__ = ["generate", "hello"]
 
+from .generate import generate
 from .hello import hello
-from .notes import notes
