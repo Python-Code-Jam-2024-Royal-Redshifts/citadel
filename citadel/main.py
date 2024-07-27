@@ -7,8 +7,7 @@ import typer
 from discord import app_commands
 from dotenv import load_dotenv
 
-from citadel import commands
-from citadel.globals import LOGGER
+from citadel import commands, globals
 
 APP = typer.Typer()
 GUILD_ID = discord.Object(id=1262512524541296640)
@@ -45,18 +44,22 @@ class CitadelClient(discord.Client):
 @APP.command()
 def main(
     discord_token: Annotated[str, typer.Argument(envvar="CITADEL_DISCORD_TOKEN")],
+    openai_token: Annotated[str, typer.Argument(envvar="OPENAI_TOKEN")],
+    openai_model: Annotated[str, typer.Argument(envvar="OPENAI_MODEL")] = "gpt-4o",
     log_level: Annotated[LogLevel, typer.Argument(case_sensitive=False, envvar="LOG_LEVEL")] = LogLevel.INFO,
 ) -> None:
     """Citadel Discord bot.
 
     Environment variables can be set via the command-line, or in a file named `.env`.
     """
-    LOGGER.setLevel(logging.getLevelName(log_level.value))
+    globals.LOGGER.setLevel(logging.getLevelName(log_level.value))
+    globals.OPENAI_CLIENT.api_key = openai_token
+    globals.OPENAI_MODEL = openai_model
 
     # Set up the client, add commands, and start.
     client = CitadelClient()
     client.tree.add_command(commands.hello)
-    client.tree.add_command(commands.notes)
+    client.tree.add_command(commands.generate)
 
     client.run(discord_token)
 

@@ -1,11 +1,13 @@
 """Global values that can be used throughout the program."""
 
 import logging
-from openai import OpenAI
+import os
 
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from openai import OpenAI
 from rich.logging import RichHandler
 
-_all_ = ["LOGGER"]
+_all_ = ["LOGGER", "OPENAI_CLIENT", "OPENAI_MODEL", "JINJA"]
 
 # Logger
 logging.basicConfig(
@@ -15,4 +17,15 @@ logging.basicConfig(
 )
 LOGGER = logging.getLogger("rich")
 
-OPENAI_CLIENT = OpenAI()
+# OpenAI client
+#
+# The API key and model name get set in `main::main`
+OPENAI_CLIENT: OpenAI = OpenAI(api_key="XYZ")
+OPENAI_MODEL: str = ""
+
+# Jinja2
+TEMPLATE_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "templates",
+)
+JINJA = Environment(loader=FileSystemLoader(TEMPLATE_PATH), undefined=StrictUndefined)
