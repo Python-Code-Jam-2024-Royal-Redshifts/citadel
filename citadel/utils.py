@@ -1,7 +1,8 @@
-__all__ = "sleep"
+__all__ = ["sleep"]
 
 import asyncio
 
 
-async def sleep():
+async def sleep() -> None:
+    """Sleep for a bit of time."""
     await asyncio.sleep(0.5)

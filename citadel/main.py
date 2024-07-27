@@ -6,6 +6,8 @@ import discord
 import typer
 from discord import app_commands
 from dotenv import load_dotenv
+from openai import OpenAI
+from sqlmodel import SQLModel, create_engine
 
 from citadel import commands, globals
 
@@ -44,6 +46,7 @@ def main(
     discord_token: Annotated[str, typer.Argument(envvar="CITADEL_DISCORD_TOKEN")],
     openai_token: Annotated[str, typer.Argument(envvar="OPENAI_TOKEN")],
     openai_model: Annotated[str, typer.Argument(envvar="OPENAI_MODEL")] = "gpt-4o",
+    db_path: Annotated[str, typer.Argument(envvar="DB_PATH")] = "./citadel.db",
     log_level: Annotated[LogLevel, typer.Argument(case_sensitive=False, envvar="LOG_LEVEL")] = LogLevel.INFO,
 ) -> None:
     """Citadel Discord bot.
@@ -51,8 +54,13 @@ def main(
     Environment variables can be set via the command-line, or in a file named `.env`.
     """
     globals.LOGGER.setLevel(logging.getLevelName(log_level.value))
-    globals.OPENAI_CLIENT.api_key = openai_token
+    globals.OPENAI_CLIENT = OpenAI(api_key=openai_token)
     globals.OPENAI_MODEL = openai_model
+
+    # Set up the database.
+    engine = create_engine(f"sqlite:///{db_path}")
+    SQLModel.metadata.create_all(engine)
+    globals.SQL_ENGINE = engine
 
     # Set up the client, add commands, and start.
     client = CitadelClient()
