@@ -151,15 +151,16 @@ async def generate(  # noqa: C901, PLR0915
         wait=True,
     )
 
+    buttons_resp = None
     while True:
         # Wait until we get a button click.
-        buttons_resp = None
         while buttons_resp is None:
             await utils.sleep()
             buttons_resp = buttons.get_resp()
 
         # Parse buttons, blah blah we'll add better comments in a bit
         chosen_button, buttons_interaction = buttons_resp
+        buttons_resp = None
         if chosen_button == ButtonChoice.CREATE:
             with Session(globals.get_sql_engine()) as session:
                 test = Test(name=test_name)
