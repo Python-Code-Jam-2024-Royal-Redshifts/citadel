@@ -40,6 +40,7 @@ The `pre-commit` tool is used to ensure quality commits are made in the codebase
 
 ```sh
 poetry run pre-commit install
+poetry run pre-commit install --hook-type commit-msg
 ```
 
 The `pre-commit` tool will now check all changes automatically before committing them.
