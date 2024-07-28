@@ -72,8 +72,7 @@ def get_tests() -> list[Test]:
     with Session(globals.SQL_ENGINE) as session:
         statement = sqlmodel.select(Test)
         tests = session.exec(statement)
-
-    return list(tests)
+        return list(tests)
 
 
 async def quiz_options(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:  # noqa: ARG001
