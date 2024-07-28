@@ -54,5 +54,7 @@ ignore = [
     "FIX",
     "ANN101",
     "ANN102",
+    "COM812",
+    "ISC001"
 ]
 extend-select = ["I"]
