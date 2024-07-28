@@ -31,36 +31,52 @@ class Buttons(ui.View):
     async def set_reactive(self, interaction: discord.Interaction, reactive: bool) -> None:  # noqa: FBT001
         """Set if the buttons should be reactive (i.e. they can be clicked."""
         for child in self.children:
+            if not isinstance(child, ui.Button):
+                raise RuntimeError("Unexpected child in button")
             child.disabled = not reactive
             resp = await interaction.original_response()
             await resp.edit(view=self)
 
     @ui.button(label="Create Test", style=discord.ButtonStyle.green)
-    async def create_callback(self, interaction: discord.Interaction, button: ui.Button) -> None:  # noqa: ARG002
+    async def create_callback(
+        self,
+        interaction: discord.Interaction,
+        button: ui.Button,  # type: ignore[type-arg]
+    ) -> None:
         """Handle clicking of the create test button."""
         self.__interaction = interaction
         self.__button = ButtonChoice.CREATE
 
     @ui.button(label="Edit Questions", style=discord.ButtonStyle.red)
-    async def edit_callback(self, interaction: discord.Interaction, button: ui.Button) -> None:  # noqa: ARG002
+    async def edit_callback(
+        self,
+        interaction: discord.Interaction,
+        button: ui.Button,  # type: ignore[type-arg]
+    ) -> None:
         """Handle clicking of the edit questions button."""
         self.__interaction = interaction
         self.__button = ButtonChoice.EDIT
 
     @ui.button(label="Cancel", style=discord.ButtonStyle.grey)
-    async def cancel_callback(self, interaction: discord.Interaction, button: ui.Button) -> None:  # noqa: ARG002
+    async def cancel_callback(
+        self,
+        interaction: discord.Interaction,
+        button: ui.Button,  # type: ignore[type-arg]
+    ) -> None:
         """Handle clicking of the cancel button."""
         self.__interaction = interaction
         self.__button = ButtonChoice.CANCEL
 
     def get_resp(self) -> tuple[ButtonChoice, discord.Interaction] | None:
         """Get the clicked button and it's related interaction. Returns `None` if no button has been clicked."""
-        if self.__button is None:
+        if self.__button is None or self.__interaction is None:
             return None
 
         button = self.__button
+        interaction = self.__interaction
         self.__button = None
-        return (button, self.__interaction)
+        self.__interaction = None
+        return (button, interaction)
 
 
 class QuestionEditor(ui.Modal, title="Question Editor"):
@@ -76,7 +92,7 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
             label="Questions",
             style=discord.TextStyle.paragraph,
             default=question_text,
-        )
+        )  # type: ignore[var-annotated]
         self.add_item(self.editor)
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
@@ -86,11 +102,13 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
 
     def get_resp(self) -> tuple[str, discord.Interaction] | None:
         """Get the submitted text from the editor form. Returns `None` if it hasn't been submitted yet."""
-        if not self.__done:
+        if not self.__done or self.__interaction is None:
             return None
+        interaction = self.__interaction
         self.__done = False
+        self.__interaction = None
 
-        return (self.editor.value, self.__interaction)
+        return (self.editor.value, interaction)
 
 
 @app_commands.command()
@@ -101,6 +119,9 @@ async def generate(
 ) -> None:
     """Generate test questions"""  # noqa: D400
     await interaction.response.defer()
+
+    if type(interaction.channel) is not discord.TextChannel:
+        raise RuntimeError("Unexpected channel type")
     messages = [
         msg.content
         async for msg in interaction.channel.history()
@@ -115,7 +136,10 @@ async def generate(
     )
 
     try:
-        output = json.loads(completion.choices[0].message.content)
+        content = completion.choices[0].message.content
+        if content is None:
+            raise RuntimeError("Unexpected empty output from OpenAI")
+        output = json.loads(content)
     except json.JSONDecodeError:
         await interaction.followup.send("There was an error generating the notes. Please try again.")
         raise
@@ -124,6 +148,7 @@ async def generate(
     message = await interaction.followup.send(
         NOTES_CONFIRMATION.render(notes=output, test_name=test_name),
         view=buttons,
+        wait=True,
     )
 
     while True:
