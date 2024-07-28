@@ -112,7 +112,7 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
 
 
 @app_commands.command()
-async def generate(  # noqa: C901,PLR0912,PLR0915
+async def generate(  # noqa: C901, PLR0915
     interaction: discord.Interaction,
     msg_filter: str,
     test_name: str,

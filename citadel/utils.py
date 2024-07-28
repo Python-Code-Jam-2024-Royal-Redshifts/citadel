@@ -1,7 +1,8 @@
 __all__ = ["sleep"]
 
 import asyncio
-from typing import Any, Callable, ClassVar, Coroutine, Sequence, Tuple
+from collections.abc import Callable, Coroutine, Sequence
+from typing import Any, ClassVar
 
 import discord
 from discord import ui
@@ -18,7 +19,7 @@ class Buttons(ui.View):
 
         return callback
 
-    def __init__(self, buttons: Sequence[str | Tuple[str, discord.ButtonStyle]]) -> None:
+    def __init__(self, buttons: Sequence[str | tuple[str, discord.ButtonStyle]]) -> None:
         super().__init__()
 
         for button in buttons:
@@ -48,7 +49,7 @@ async def get_openai_resp(msg: str) -> str:
     content = completion.choices[0].message.content
 
     if content is None:
-        raise RuntimeError("Unexpected empty output from OpenAI")
+        raise RuntimeError("Unexpected empty output from OpenAI")  # noqa: TRY003,EM101
     return content
 
 

@@ -85,7 +85,7 @@ async def quiz_options(interaction: discord.Interaction, current: str) -> list[a
 
 @app_commands.command()
 @app_commands.autocomplete(name=quiz_options)
-async def quiz(
+async def quiz(  # noqa: C901,PLR0912,PLR0915
     interaction: discord.Interaction,
     name: str,
 ) -> None:
@@ -178,7 +178,7 @@ async def quiz(
                             await utils.sleep(1)
 
                             if button_interaction.message is None:
-                                raise RuntimeError("Unexpected empty message")
+                                raise RuntimeError("Unexpected empty message")  # noqa: TRY003,EM101
                             await button_interaction.message.delete()
                             quiz_confirmed = True
                             break
