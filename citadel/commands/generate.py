@@ -112,6 +112,11 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
 
 
 @app_commands.command()
+@app_commands.describe(
+    msg_filter="A query that describes the kind of messages you want to include from this channel "
+    '(e.g. "Shakespeare Texts")',
+    test_name='The name you want to assign the generated test (e.g. "The Renaissance")',
+)
 async def generate(  # noqa: C901, PLR0915
     interaction: discord.Interaction,
     msg_filter: str,
