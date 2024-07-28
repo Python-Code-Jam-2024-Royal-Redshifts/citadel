@@ -66,6 +66,7 @@ def main(
     client = CitadelClient()
     client.tree.add_command(commands.hello)
     client.tree.add_command(commands.generate)
+    client.tree.add_command(commands.quiz)
 
     client.run(discord_token)
 
