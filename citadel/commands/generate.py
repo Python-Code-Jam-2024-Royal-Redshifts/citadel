@@ -112,7 +112,7 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
 
 
 @app_commands.command()
-async def generate(  # noqa: C901,PLR0912,PLR0915
+async def generate(  # noqa: C901, PLR0915
     interaction: discord.Interaction,
     msg_filter: str,
     test_name: str,
@@ -151,15 +151,16 @@ async def generate(  # noqa: C901,PLR0912,PLR0915
         wait=True,
     )
 
+    buttons_resp = None
     while True:
         # Wait until we get a button click.
-        buttons_resp = None
         while buttons_resp is None:
             await utils.sleep()
             buttons_resp = buttons.get_resp()
 
         # Parse buttons, blah blah we'll add better comments in a bit
         chosen_button, buttons_interaction = buttons_resp
+        buttons_resp = None
         if chosen_button == ButtonChoice.CREATE:
             with Session(globals.get_sql_engine()) as session:
                 test = Test(name=test_name)
@@ -198,20 +199,10 @@ async def generate(  # noqa: C901,PLR0912,PLR0915
             await message.edit(content="Processing question list...")
             await editor_interaction.response.defer()
 
-            completion = globals.get_openai_client().chat.completions.create(
-                model=globals.get_openai_model(),
-                messages=[
-                    {"role": "user", "content": EDITOR_CONFIRM_PROMPT.render(question_data=editor_output)},
-                ],
-            )
-
-            try:
-                output = json.loads(completion.choices[0].message.content)
-                await message.edit(content=NOTES_CONFIRMATION.render(notes=output, test_name=test_name))
-                await buttons.set_reactive(buttons_interaction, True)  # noqa: FBT003
-            except json.JSONDecodeError:
-                await interaction.followup.send("There was an error generating the notes. Please try again.")
-                raise
+            completion = await utils.get_openai_resp(EDITOR_CONFIRM_PROMPT.render(question_data=editor_output))
+            output = json.loads(completion)
+            await message.edit(content=NOTES_CONFIRMATION.render(notes=output, test_name=test_name))
+            await buttons.set_reactive(buttons_interaction, True)  # noqa: FBT003
 
         elif chosen_button == ButtonChoice.CANCEL:
             await message.delete()

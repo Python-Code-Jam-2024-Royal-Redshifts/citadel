@@ -3,12 +3,13 @@
 import logging
 from pathlib import Path
 
+import inflect
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from openai import OpenAI
 from rich.logging import RichHandler
 from sqlalchemy import Engine
 
-_all_ = ["LOGGER", "JINJA", "get_openai_client", "get_openai_model", "get_sql_engine"]
+_all_ = ["LOGGER", "INFLECT", "JINJA", "get_openai_client", "get_openai_model", "get_sql_engine"]
 
 # Logger
 logging.basicConfig(
@@ -56,3 +57,6 @@ def get_sql_engine() -> Engine:
 # Jinja2
 TEMPLATE_PATH = Path(__file__).parent / "templates"
 JINJA = Environment(loader=FileSystemLoader(TEMPLATE_PATH), undefined=StrictUndefined)  # noqa: S701
+
+# Inflect
+INFLECT = inflect.engine()
