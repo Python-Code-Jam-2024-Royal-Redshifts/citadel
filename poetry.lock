@@ -207,6 +207,19 @@ files = [
 ]
 
 [[package]]
+name = "dacite"
+version = "1.8.1"
+description = "Simple creation of data classes from dictionaries."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "dacite-1.8.1-py3-none-any.whl", hash = "sha256:cc31ad6fdea1f49962ea42db9421772afe01ac5442380d9a99fcf3d188c61afe"},
+]
+
+[package.extras]
+dev = ["black", "coveralls", "mypy", "pre-commit", "pylint", "pytest (>=5)", "pytest-benchmark", "pytest-cov"]
+
+[[package]]
 name = "discord-py"
 version = "2.4.0"
 description = "A Python wrapper for the Discord API"
@@ -1398,4 +1411,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "3.12.*"
-content-hash = "9ba243158103d7024d6feca1c1f03ce17495a17f6c0d94b5aee1823d5e42f1ea"
+content-hash = "1f60bb8bf1832c6286e0f22d21800a98fb9e6f992adfbef75bad2120873633c8"
