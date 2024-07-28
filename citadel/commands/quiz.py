@@ -174,7 +174,8 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
                         )
                     else:
                         players.remove(button_interaction.user)
-                        await button_interaction.response.edit_message(embed=render_launcher_waiting())
+                        await button_interaction.response.defer()
+                        await message.edit(embed=render_launcher_waiting())
 
                         if len(players) == 0:
                             await utils.sleep(1)
@@ -183,7 +184,7 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
                                 raise RuntimeError("Unexpected empty message")  # noqa: TRY003,EM101
                             await button_interaction.message.delete()
                             quiz_confirmed = True
-                            break
+                            return
 
     while countdown > 0:
         await utils.sleep(1)
