@@ -33,7 +33,7 @@ def get_openai_client() -> OpenAI:
     return OPENAI_CLIENT
 
 
-def get_openai_model() -> OpenAI:
+def get_openai_model() -> str:
     """Get the global OpenAI model."""
     if OPENAI_MODEL is None:
         raise NameError(UNINITIALIZED_ERR)
