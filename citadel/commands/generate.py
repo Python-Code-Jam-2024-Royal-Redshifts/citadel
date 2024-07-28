@@ -32,7 +32,7 @@ class Buttons(ui.View):
         """Set if the buttons should be reactive (i.e. they can be clicked."""
         for child in self.children:
             if not isinstance(child, ui.Button):
-                raise RuntimeError("Unexpected child in button")
+                raise TypeError("Unexpected child in button")  # noqa: TRY003,EM101
             child.disabled = not reactive
             resp = await interaction.original_response()
             await resp.edit(view=self)
@@ -41,7 +41,7 @@ class Buttons(ui.View):
     async def create_callback(
         self,
         interaction: discord.Interaction,
-        button: ui.Button,  # type: ignore[type-arg]
+        button: ui.Button,  # type: ignore[type-arg]  # noqa: ARG002
     ) -> None:
         """Handle clicking of the create test button."""
         self.__interaction = interaction
@@ -51,7 +51,7 @@ class Buttons(ui.View):
     async def edit_callback(
         self,
         interaction: discord.Interaction,
-        button: ui.Button,  # type: ignore[type-arg]
+        button: ui.Button,  # type: ignore[type-arg]  # noqa: ARG002
     ) -> None:
         """Handle clicking of the edit questions button."""
         self.__interaction = interaction
@@ -61,7 +61,7 @@ class Buttons(ui.View):
     async def cancel_callback(
         self,
         interaction: discord.Interaction,
-        button: ui.Button,  # type: ignore[type-arg]
+        button: ui.Button,  # type: ignore[type-arg]  # noqa: ARG002
     ) -> None:
         """Handle clicking of the cancel button."""
         self.__interaction = interaction
@@ -112,7 +112,7 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
 
 
 @app_commands.command()
-async def generate(
+async def generate(  # noqa: C901,PLR0912,PLR0915
     interaction: discord.Interaction,
     msg_filter: str,
     test_name: str,
@@ -121,7 +121,7 @@ async def generate(
     await interaction.response.defer()
 
     if type(interaction.channel) is not discord.TextChannel:
-        raise RuntimeError("Unexpected channel type")
+        raise RuntimeError("Unexpected channel type")  # noqa: TRY003,EM101
     messages = [
         msg.content
         async for msg in interaction.channel.history()
@@ -138,7 +138,7 @@ async def generate(
     try:
         content = completion.choices[0].message.content
         if content is None:
-            raise RuntimeError("Unexpected empty output from OpenAI")
+            raise RuntimeError("Unexpected empty output from OpenAI")  # noqa: TRY003,EM101
         output = json.loads(content)
     except json.JSONDecodeError:
         await interaction.followup.send("There was an error generating the notes. Please try again.")
