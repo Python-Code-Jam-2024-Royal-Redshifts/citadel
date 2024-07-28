@@ -1,3 +1,4 @@
-__all__ = ["hello"]
+__all__ = ["generate", "hello"]
 
+from .generate import generate
 from .hello import hello
