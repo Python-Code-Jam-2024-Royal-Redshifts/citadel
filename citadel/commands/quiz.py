@@ -86,11 +86,12 @@ async def quiz_options(interaction: discord.Interaction, current: str) -> list[a
 
 @app_commands.command()
 @app_commands.autocomplete(name=quiz_options)
+@app_commands.describe(name="The name of an existing test")
 async def quiz(  # noqa: C901,PLR0912,PLR0915
     interaction: discord.Interaction,
     name: str,
 ) -> None:
-    """Take a quiz with friends"""  # noqa: D400
+    """Compete with friends on knowledge of a test"""  # noqa: D400
     test = next((test for test in get_tests() if test.name == name), None)
     if test is None:
         await interaction.response.send_message(f'The test for "{name}" doesn\'t exist.')
