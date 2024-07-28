@@ -19,9 +19,10 @@ QUIZ_OVERVIEW = globals.JINJA.get_template("messages/QUIZ-OVERVIEW.md")
 QUIZ_RESULTS = globals.JINJA.get_template("messages/QUIZ-RESULTS.md")
 
 
-LOBBY_STARTING_TIME = 2
-QUESTION_TIME = 10
-OVERVIEW_TIME = 5
+LOBBY_STARTING_TIME = 10
+QUESTION_TIME = 30
+OVERVIEW_TIME = 10
+MAX_POINTS = 1000
 
 
 class TestLauncherButtons(StrEnum):
@@ -189,7 +190,14 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
 
     # Start the game.
     game_players = {player: PlayerStats() for player in players}
-    points = math.floor(1000 / len(players)) if len(players) != 1 else 1000
+
+    match len(players):
+        case 1:
+            points = MAX_POINTS
+        case n if n > MAX_POINTS:
+            points = 1
+        case _:
+            points = math.floor(MAX_POINTS / len(players))
 
     for question_index, question in enumerate(test_questions):
         answers = question.incorrect_answers
@@ -218,12 +226,23 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
                     )
                     continue
 
+                guess_position = globals.INFLECT.ordinal(str(len(answered) + 1))
+                guess_position_phrase = f"You were the {guess_position} person to pick an answer."
                 if button == question.correct_answer:
+                    await button_interaction.response.send_message(
+                        f"You chose correctly :partying_face:! {guess_position_phrase}",
+                        ephemeral=True,
+                    )
                     game_players[button_interaction.user].points += points * (len(players) - len(answered))
                     game_players[button_interaction.user].correct += 1
+                else:
+                    await button_interaction.response.send_message(
+                        f"You chose incorrectly :pensive:. {guess_position_phrase}",
+                        ephemeral=True,
+                    )
 
                 answered[button_interaction.user] = button
-                await button_interaction.response.edit_message(embed=render_question())
+                await message.edit(embed=render_question())
 
             await utils.sleep(1)
             seconds_left -= 1
