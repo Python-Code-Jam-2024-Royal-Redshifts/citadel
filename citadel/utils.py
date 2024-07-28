@@ -42,7 +42,7 @@ class Buttons(ui.View):
 
 
 async def get_openai_resp(msg: str) -> str:
-    completion = globals.get_openai_client().chat.completions.create(
+    completion = await globals.get_openai_client().chat.completions.create(
         model=globals.get_openai_model(),
         messages=[{"role": "user", "content": msg}],
     )

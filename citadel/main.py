@@ -6,7 +6,7 @@ import discord
 import typer
 from discord import app_commands
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import AsyncOpenAI
 from sqlmodel import SQLModel, create_engine
 
 from citadel import commands, globals
@@ -42,10 +42,11 @@ class CitadelClient(discord.Client):
 
 
 @APP.command()
-def main(
+def main(  # noqa: PLR0913
     discord_token: Annotated[str, typer.Argument(envvar="CITADEL_DISCORD_TOKEN")],
     openai_token: Annotated[str, typer.Argument(envvar="OPENAI_TOKEN")],
     openai_model: Annotated[str, typer.Argument(envvar="OPENAI_MODEL")] = "gpt-4o",
+    openai_base: Annotated[str, typer.Argument(envvar="OPENAI_BASE")] = "https://api.openai.com/v1",
     db_path: Annotated[str, typer.Argument(envvar="DB_PATH")] = "./citadel.db",
     log_level: Annotated[LogLevel, typer.Argument(case_sensitive=False, envvar="LOG_LEVEL")] = LogLevel.INFO,
 ) -> None:
@@ -54,7 +55,7 @@ def main(
     Environment variables can be set via the command-line, or in a file named `.env`.
     """
     globals.LOGGER.setLevel(logging.getLevelName(log_level.value))
-    globals.OPENAI_CLIENT = OpenAI(api_key=openai_token)
+    globals.OPENAI_CLIENT = AsyncOpenAI(api_key=openai_token, base_url=openai_base)
     globals.OPENAI_MODEL = openai_model
 
     # Set up the database.
@@ -67,6 +68,10 @@ def main(
     client.tree.add_command(commands.hello)
     client.tree.add_command(commands.generate)
     client.tree.add_command(commands.quiz)
+
+    @client.tree.error
+    async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError) -> None:  # noqa: ARG001
+        await interaction.channel.send("An unknown error has occurred. Please check server logs for more information.")
 
     client.run(discord_token)
 

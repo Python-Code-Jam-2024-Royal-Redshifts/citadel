@@ -117,7 +117,7 @@ class QuestionEditor(ui.Modal, title="Question Editor"):
     '(e.g. "Shakespeare Texts")',
     test_name='The name you want to assign the generated test (e.g. "The Renaissance")',
 )
-async def generate(  # noqa: C901, PLR0915
+async def generate(  # noqa: C901
     interaction: discord.Interaction,
     msg_filter: str,
     test_name: str,
@@ -133,21 +133,8 @@ async def generate(  # noqa: C901, PLR0915
         if not msg.content.startswith("/") and interaction.user != interaction.client.user
     ]
 
-    completion = globals.get_openai_client().chat.completions.create(
-        model=globals.get_openai_model(),
-        messages=[
-            {"role": "user", "content": NOTES_PROMPT.render(messages=messages, msg_filter=msg_filter)},
-        ],
-    )
-
-    try:
-        content = completion.choices[0].message.content
-        if content is None:
-            raise RuntimeError("Unexpected empty output from OpenAI")  # noqa: TRY003,EM101
-        output = json.loads(content)
-    except json.JSONDecodeError:
-        await interaction.followup.send("There was an error generating the notes. Please try again.")
-        raise
+    completion = await utils.get_openai_resp(NOTES_PROMPT.render(messages=messages, msg_filter=msg_filter))
+    output = json.loads(completion)
 
     buttons = Buttons()
     message = await interaction.followup.send(

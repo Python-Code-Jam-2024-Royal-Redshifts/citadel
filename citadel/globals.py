@@ -5,7 +5,7 @@ from pathlib import Path
 
 import inflect
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
-from openai import OpenAI
+from openai import AsyncOpenAI
 from rich.logging import RichHandler
 from sqlalchemy import Engine
 
@@ -22,12 +22,12 @@ LOGGER = logging.getLogger("rich")
 # OpenAI client
 #
 # The API key and model name get set in `main::main`
-OPENAI_CLIENT: OpenAI | None = None
+OPENAI_CLIENT: AsyncOpenAI | None = None
 OPENAI_MODEL: str | None = None
 UNINITIALIZED_ERR = "Variable hasn't been initalized yet"
 
 
-def get_openai_client() -> OpenAI:
+def get_openai_client() -> AsyncOpenAI:
     """Get the global OpenAI client."""
     if OPENAI_CLIENT is None:
         raise NameError(UNINITIALIZED_ERR)
