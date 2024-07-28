@@ -1,5 +1,6 @@
 import json
 import math
+import random
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -202,6 +203,7 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
     for question_index, question in enumerate(test_questions):
         answers = question.incorrect_answers
         answers.append(question.correct_answer)
+        random.shuffle(answers)
 
         question_buttons = utils.Buttons(answers)
         seconds_left = QUESTION_TIME
@@ -267,6 +269,7 @@ async def quiz(  # noqa: C901,PLR0912,PLR0915
                     description=QUIZ_OVERVIEW.render(
                         question_number=question_index + 1,
                         question_total=len(test_questions),
+                        correct_answer=question.correct_answer,
                         leaderboard=leaderboard,
                         seconds=countdown,
                     ),

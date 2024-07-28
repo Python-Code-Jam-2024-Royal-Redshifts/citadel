@@ -1,4 +1,5 @@
 ### Question {{ question_number }}/{{ question_total }}
+### Correct Answer: {{ correct_answer }}
 {% for person in leaderboard[0] -%}
 **1st Place:** {{ person[0].display_name }} ({{ person[1].points }} points)
 {% endfor -%}
