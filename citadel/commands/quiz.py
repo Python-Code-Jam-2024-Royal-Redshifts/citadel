@@ -76,38 +76,6 @@ def get_tests() -> list[Test]:
     return list(tests)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async def quiz_options(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:  # noqa: ARG001
     """Filter the autocompletions to any quizzes that start with the user's query."""
     return [
@@ -139,19 +107,22 @@ async def quiz(
 
     test_title = f"Quiz Launcher: {name}"
     players = [interaction.user]
-    def render_launcher_waiting() -> None:
-        discord.Embed(
+
+    def render_launcher_waiting() -> discord.Embed:
+        return discord.Embed(
             title=test_title,
             description=QUIZ_PLAYERS.render(players=[player.display_name for player in players]),
         )
-    def render_launcher_starting(countdown: int) -> None:
-        discord.Embed(
+
+    def render_launcher_starting(countdown: int) -> discord.Embed:
+        return discord.Embed(
             title=test_title,
             description="***Starting quiz in {countdown} {second}...***".format(
                 countdown=countdown,
                 second="seconds" if countdown != 1 else "second",
             ),
         )
+
     test_buttons = utils.Buttons(
         [
             (TestLauncherButtons.START.value, discord.ButtonStyle.primary),
@@ -205,6 +176,9 @@ async def quiz(
 
                         if len(players) == 0:
                             await utils.sleep(1)
+
+                            if button_interaction.message is None:
+                                raise RuntimeError("Unexpected empty message")
                             await button_interaction.message.delete()
                             quiz_confirmed = True
                             break
@@ -225,8 +199,9 @@ async def quiz(
         question_buttons = utils.Buttons(answers)
         seconds_left = QUESTION_TIME
         answered: dict[discord.User | discord.Member, str] = {}
-        def render_question() -> None:
-            discord.Embed(
+
+        def render_question() -> discord.Embed:
+            return discord.Embed(
                 description=QUIZ_QUESTION.render(
                     question=question.question,  # noqa: B023
                     seconds_left=seconds_left,  # noqa: B023

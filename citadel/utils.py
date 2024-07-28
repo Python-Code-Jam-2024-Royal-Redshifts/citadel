@@ -1,7 +1,7 @@
 __all__ = ["sleep"]
 
 import asyncio
-from typing import ClassVar
+from typing import Any, Callable, ClassVar, Coroutine, Sequence, Tuple
 
 import discord
 from discord import ui
@@ -12,25 +12,25 @@ from citadel import globals
 class Buttons(ui.View):
     __output: ClassVar[list[tuple[str, discord.Interaction]]] = []
 
-    def create_callback(self, button: str) -> int:
+    def create_callback(self, button: str) -> Callable[[discord.Interaction], Coroutine[Any, Any, None]]:
         async def callback(interaction: discord.Interaction) -> None:
             self.__output.append((button, interaction))
 
         return callback
 
-    def __init__(self, buttons: list[str | tuple[str, discord.ButtonStyle]]) -> None:
+    def __init__(self, buttons: Sequence[str | Tuple[str, discord.ButtonStyle]]) -> None:
         super().__init__()
 
         for button in buttons:
-            if type(button) is str:
+            if isinstance(button, str):
                 label = button
                 style = discord.ButtonStyle.primary
             else:
                 label = button[0]
                 style = button[1]
 
-            ui_button = ui.Button(label=label, style=style)
-            ui_button.callback = self.create_callback(label)
+            ui_button = ui.Button(label=label, style=style)  # type: ignore[var-annotated]
+            ui_button.callback = self.create_callback(label)  # type: ignore[assignment]
             self.add_item(ui_button)
 
     def get_responses(self) -> list[tuple[str, discord.Interaction]]:
@@ -45,7 +45,11 @@ async def get_openai_resp(msg: str) -> str:
         model=globals.get_openai_model(),
         messages=[{"role": "user", "content": msg}],
     )
-    return completion.choices[0].message.content
+    content = completion.choices[0].message.content
+
+    if content is None:
+        raise RuntimeError("Unexpected empty output from OpenAI")
+    return content
 
 
 async def sleep(time: float = 0.5) -> None:
