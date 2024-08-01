@@ -9,10 +9,10 @@
 ## Current features include:
 
 #### Automatic test generation from chat history. No longer shall you manually type in your questions 🥳
-<img src ="/assets/generate.gif" alt="Generate Command" height="200em">
+<img src ="/assets/generate.gif" alt="Generate Command" height="500em">
 
 #### Kahoot-styled quizzes. Challenge your friends to a game to see who really knows their stuff 🧑‍💻
-<img src ="/assets/quiz.gif" alt="Quiz Command" height="200em">
+<img src ="/assets/quiz.gif" alt="Quiz Command" height="500em">
 
 ## Running the bot
 Setting up the bot is a fairly simple procedure, though it requires a few steps:
