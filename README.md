@@ -1,18 +1,17 @@
 <div align="center">
     <h1>Citadel</h1>
     <img src ="/assets/citadel.png" alt="Citadel profile image" height="200em">
+    <p>Citadel is <em>the</em> Discord bot to use at your next study jam. It incorporates the best parts of services such as Quizlet and Kahoot, and combines them into a seamless interface that everyone can use (well, people that have Discord anyway).</p>
 </div>
 <br>
 
-Citadel is *the* Discord bot to use at your next study jam. It incorporates the best parts of services such as Quizlet and Kahoot, and combines them into a seamless interface that everyone can use (well, people that have Discord anyway).
+## Current features include:
 
-Current features include:
+#### Automatic test generation from chat history. No longer shall you manually type in your questions 🥳
+<img src ="/assets/generate.gif" alt="Generate Command" height="200em">
 
-**Automatic test generation from chat history. No longer shall you manually type in your questions 🥳**
-![Generate Command](/assets/generate.gif)
-
-**Kahoot-styled quizzes. Challenge your friends to a game to see who really knows their stuff 🧑‍💻**
-![Quiz Command](/assets/quiz.gif)
+#### Kahoot-styled quizzes. Challenge your friends to a game to see who really knows their stuff 🧑‍💻
+<img src ="/assets/quiz.gif" alt="Quiz Command" height="200em">
 
 ## Running the bot
 Setting up the bot is a fairly simple procedure, though it requires a few steps:
