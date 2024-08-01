@@ -69,12 +69,6 @@ def main(  # noqa: PLR0913
     client.tree.add_command(commands.generate)
     client.tree.add_command(commands.quiz)
 
-    @client.tree.error
-    async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError) -> None:  # noqa: ARG001
-        await interaction.followup.send(
-            "An unknown error has occurred. Please check server logs for more information."
-        )
-
     client.run(discord_token)
 
 

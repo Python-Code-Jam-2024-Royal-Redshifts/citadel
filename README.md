@@ -64,3 +64,12 @@ poetry run citadel
 ```
 
 You can interact with the bot via slash commands, which can be seen by typing `/` into a Discord message box.
+
+## Contributors
+This project wouldn't be possible without the amazing work of the following individuals:
+
+- [Joshtdbx](https://github.com/giplgwm): Development of test generation functionality
+- [danman87](https://github.com/headlessdagger): Development of Docker functionality
+- [hwittenborn](https://github.com/hwittenborn): Development of test generation/quiz/Docker functionality
+- [juseraru](https://github.com/juseraru): Development of project outline, including implementations for test generation and Docker functionality
+- [stephen](https://github.com/stuxf): Original idea for project, helped outline test generation and quiz functionality
