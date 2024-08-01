@@ -3,7 +3,7 @@
     <img src ="/assets/citadel.png" alt="Citadel profile image" height="200em">
     <br>
     <br>
-    <p>Citadel is <em>the</em> Discord bot to use at your next study jam. It incorporates the best parts of services such as Quizlet and Kahoot, and combines them into a seamless interface that everyone can use (well, people that have Discord anyway).</p>
+    <p>Have you ever been overloaded by information you need to study? Do you need a method that's more interactive and enjoyable to use? Then Citadel is <em>the</em> Discord bot to use. It incorporates the best parts of services such as Quizlet and Kahoot, and combines them into a seamless interface that everyone can use (well, people that have Discord anyway).</p>
 </div>
 
 ## Current features include:
