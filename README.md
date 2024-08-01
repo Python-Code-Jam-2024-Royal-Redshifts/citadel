@@ -55,7 +55,7 @@ There are a few environment variables needed to run the bot. Currently, those ar
 - `CITADEL_DISCORD_TOKEN`: The Discord token you created above.
 - `OPENAI_TOKEN` An [OpenAI API token](https://platform.openai.com/docs/api-reference/api-keys) to use in API requests.
 - `OPENAI_MODEL`: The OpenAI model to use (defaults to GPT-4o).
-- `OPENAI_BASE`: The OpenAI endpoint to use. Can be changed if you'd like to use an OpenAI-compatible service such as [Ollama](https://ollama.com/).
+- `OPENAI_BASE`: The OpenAI endpoint to use. Can be changed if you'd like to use an OpenAI-compatible service such as [Ollama](https://ollama.com/). **A higher-parameter model is recommended for the best experience.**
 - `DB_PATH`: The path to the database Citadel should use (defaults to `./citadel.db`).
 - `LOG_LEVEL` The amount of logging Citadel should show by default. One of `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL` (defaults to `INFO`).
 
